@@ -1,0 +1,57 @@
+{
+  "data_hash": "0c8f513efa7a775e35bcba5c646869c8",
+  "code_hash": "fe6760eade38aa49264d755de3843967",
+  "tf": "2.21.0",
+  "emitted_configs": [
+    "bilstm__concat",
+    "gru__concat",
+    "cnn__concat",
+    "cnn_gru__concat",
+    "tcn__concat",
+    "cnn_gru__gate",
+    "cnn_gru__film",
+    "cnn_gru__xattn",
+    "cnn_gru__film+ssl",
+    "cnn_gru__film+nodyn",
+    "dl_current",
+    "rf_highres",
+    "persistence_5min",
+    "cnn_gru__film+retrieval",
+    "cnn_gru__film+dynablate",
+    "cnn_gru__film+ssl+retrieval"
+  ],
+  "n_seeds": 5,
+  "n_folds": 5,
+  "smoke": false,
+  "epochs": 100,
+  "patience": 10,
+  "ssl_epochs": 40,
+  "batch": 32,
+  "lr": 0.001,
+  "rf_trees": 300,
+  "d_model": 24,
+  "base_seed": 42,
+  "clean": "raw",
+  "meal_caps": {
+    "calories": 2000.0,
+    "carbs": 300.0,
+    "protein": 200.0,
+    "fat": 150.0,
+    "fiber": 80.0
+  },
+  "mask_frac": 0.15,
+  "mask_span": 5,
+  "retr_k": 25,
+  "retr_alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "retr_taus": [
+    0.5,
+    1.0,
+    2.0
+  ]
+}

@@ -1,0 +1,16 @@
+model,n_params
+cnn_gru__concat@w60,7876
+sa__concat@w60,9052
+dl_current@w60,15347
+cnn_gru__concat@w10_1min,7876
+sa__concat@w10_1min,9052
+dl_current@w10_1min,15347
+cnn_gru__concat@w10_5min,7876
+sa__concat@w10_5min,9052
+dl_current@w10_5min,15347
+cnn_gru__concat@w5_1min,7876
+sa__concat@w5_1min,9052
+dl_current@w5_1min,15347
+rf_highres@w60,0
+rf_highres@w10_1min,0
+persistence_5min,0

@@ -1,0 +1,13 @@
+model,input,n_params,predict_ms,predict_p90_ms,forward_ms,forward_p90_ms,matched_control,delta_vs_matched_control
+cnn_gru__concat,60x1min,7876,126.97,133.17,8.484,8.769,,0
+cnn_gru__concat+attnpool,60x1min,8292,116.0,124.07,8.519,8.937,cnn_gru__concat,416
+cnn__concat,60x1min,6028,124.26,129.02,4.619,5.431,,0
+cnn__concat+attnpool,60x1min,6444,123.72,128.74,4.607,4.836,cnn__concat,416
+cnn_sa__concat,60x1min,9148,123.67,129.8,4.709,4.913,cnn__concat,3120
+sa__concat,60x1min,9052,124.5,130.46,4.823,5.33,cnn__concat,3024
+cnn_gru__xattn,60x1min,10588,127.68,135.29,9.029,10.289,,0
+cnn_gru__coattn_ctl,60x1min,13804,128.34,132.95,8.908,9.332,cnn_gru__xattn,3216
+cnn_gru__coattn,60x1min,13804,128.41,134.2,9.01,9.369,cnn_gru__coattn_ctl,0
+cnn_sa__coattn,60x1min,15076,124.41,129.75,5.02,5.817,cnn_sa__concat,5928
+dl_current_highres,60x1min,15347,130.99,138.1,10.656,11.647,,0
+dl_current_binned,12x5min,15347,123.21,128.26,2.97,3.402,,0

@@ -1,0 +1,103 @@
+{
+  "source_dir": "E:\\Ilkom ULM\\Penelitian\\Prediksi Glukosa\\Bima 2026\\UserEmbedding\\paper_personalization\\Paper1\\NFP for Few Shot Postprandial Glucose\\AIH\\dataset\\Shanghai_T2DM",
+  "n_files": 109,
+  "n_meals": 3050,
+  "n_patients": 92,
+  "X_shape": [
+    3050,
+    5,
+    1
+  ],
+  "static_layout": [
+    "age",
+    "sex",
+    "bmi",
+    "hba1c_pct",
+    "hour_sin",
+    "hour_cos",
+    "is_morning",
+    "is_evening",
+    "is_weekend",
+    "meal_breakfast",
+    "meal_lunch",
+    "meal_dinner"
+  ],
+  "pre_offsets_min": [
+    -60,
+    -45,
+    -30,
+    -15,
+    0
+  ],
+  "horizons_min": [
+    30,
+    60,
+    120
+  ],
+  "knobs": {
+    "SLOT_TOL": 7,
+    "TARGET_TOL": 8,
+    "REQUIRE_ALL_SLOTS": true,
+    "MIN_GAP_BEFORE": 60,
+    "EXCLUDE_MEAL_WITHIN_HORIZON": true,
+    "HORIZON_GUARD": 120,
+    "MEAL_WINDOWS": {
+      "breakfast": [
+        5,
+        10
+      ],
+      "lunch": [
+        11,
+        15
+      ],
+      "dinner": [
+        17,
+        22
+      ]
+    },
+    "REQUIRE_MEAL_TYPE": true,
+    "MIN_MEALS_PER_PATIENT": 5,
+    "CGM_BOUNDS": [
+      20.0,
+      600.0
+    ]
+  },
+  "hba1c": {
+    "converted": "IFCC mmol/mol -> NGSP % via 0.09148*x + 2.152",
+    "tertile_cuts_pct": [
+      7.4346,
+      10.4009
+    ]
+  },
+  "diagnosis_field": "HbA1c tertile, NOT a clinical diagnosis (cohort is all T2D)",
+  "attrition": {
+    "meal_events": 3802,
+    "unreadable": 0,
+    "too_few_cgm": 0,
+    "no_meal_type": 182,
+    "meal_too_close_before": 22,
+    "meal_within_horizon": 153,
+    "incomplete_pre_window": 28,
+    "missing_target": 64,
+    "kept": 3353,
+    "dropped_sparse_patient_meals": 0,
+    "dropped_missing_static_meals": 303
+  },
+  "dropped_patients": [],
+  "dropped_patients_reason": "fewer than 5 usable meals",
+  "dropped_missing_static": [
+    "2064",
+    "2066",
+    "2067",
+    "2080",
+    "2081",
+    "2088",
+    "2091",
+    "2095"
+  ],
+  "dropped_missing_static_reason": "a required static (age/sex/BMI/HbA1c) is absent in the summary sheet, written there as '/'. Coerced to NaN and DROPPED, never imputed: HbA1c carries the participant's glucose baseline and is the feature this cohort exists to test.",
+  "code_sha": "988a78b1073dda4e",
+  "numpy": "2.4.4",
+  "pandas": "3.0.2",
+  "python": "3.14.3"
+}

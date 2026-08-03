@@ -1,0 +1,57 @@
+{
+  "experiment": "E4_level_vs_shape",
+  "data_hash": "eb7a92ffb0f69190",
+  "configs": {
+    "C": {
+      "level": null,
+      "shape": false,
+      "label": "context only"
+    },
+    "L_C": {
+      "level": "last",
+      "shape": false,
+      "label": "level (last bin) + context"
+    },
+    "S_C": {
+      "level": null,
+      "shape": true,
+      "label": "shape + context"
+    },
+    "L_S_C": {
+      "level": "last",
+      "shape": true,
+      "label": "level + shape + context"
+    },
+    "Lm_C": {
+      "level": "mean",
+      "shape": false,
+      "label": "12-bin window mean + context"
+    }
+  },
+  "normalization": "fold-wise global (FoldNormalizer), fit on train+val participants only -- identical in every configuration",
+  "n_seeds": 8,
+  "n_folds": 5,
+  "base_seed": 42,
+  "rf_trees": 300,
+  "clean": "capped",
+  "meal_caps": {
+    "calories": 2000.0,
+    "carbs": 300.0,
+    "protein": 200.0,
+    "fat": 150.0,
+    "fiber": 80.0
+  },
+  "recon_tol": 0.001,
+  "level_tol": 1e-09,
+  "code_hash": {
+    "attr_run.py": "ab1d672e974493f3",
+    "ablation_run.py": "e8edb3ee26ccfe43",
+    "lightdl_data.py": "96faddbf509eb052",
+    "foldwise_normalizer.py": "5063396fb4b96d38",
+    "common_corrected.py": "ef088e84e455bab0"
+  },
+  "python": "3.14.3",
+  "numpy": "2.4.4",
+  "pandas": "3.0.2",
+  "sklearn": "1.8.0"
+}

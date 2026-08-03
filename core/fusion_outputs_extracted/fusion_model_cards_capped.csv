@@ -1,0 +1,17 @@
+model,n_params
+bilstm__concat,5476
+gru__concat,6076
+cnn__concat,6028
+cnn_gru__concat,7876
+tcn__concat,6247
+cnn_gru__gate,20836
+cnn_gru__film+retrieval,8308
+cnn_gru__film+dynablate,8308
+cnn_gru__film,8308
+cnn_gru__xattn,10588
+cnn_gru__film+ssl+retrieval,8308
+cnn_gru__film+ssl,8308
+cnn_gru__film+nodyn,8308
+dl_current,15347
+rf_highres,0
+persistence_5min,0

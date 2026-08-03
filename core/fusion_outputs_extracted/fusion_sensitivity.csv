@@ -1,0 +1,5 @@
+tag,increment,dR2_60,verdict
+capped,FiLM beats concat,-0.005591183942782825,INCONCLUSIVE
+capped,cross-attention beats concat,0.006934138515257885,INCONCLUSIVE
+capped,SSL pretraining adds,-0.014214285961004896,INCONCLUSIVE
+capped,retrieval adds,-0.0048307413498680386,NEGLIGIBLE

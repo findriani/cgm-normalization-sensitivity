@@ -1,0 +1,13 @@
+numpy>=1.24
+pandas>=2.0
+scikit-learn>=1.3
+scipy>=1.11
+matplotlib>=3.7
+tqdm>=4.60
+
+# GPU experiments (E2, E2b, attention, window, fusion)
+tensorflow>=2.13
+
+# Traditional ML baselines (Table S10)
+catboost>=1.2
+lightgbm>=4.0

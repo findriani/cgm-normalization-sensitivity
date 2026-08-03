@@ -1,0 +1,7 @@
+family,horizon,increment,protocol_1,protocol_2,isolates,ddR2,lo,hi,perm_p,seed_pos_frac,holm_p,verdict
+primary,30,CGM adds beyond context,global,subject_z,normalization effect on the increment,0.22376287780145673,0.14717739481032863,0.3386822760540248,9.999000099990002e-05,1.0,,
+primary,30,context adds beyond CGM,global,subject_z,normalization effect on the increment,-0.21643513224222213,-0.36383759765586915,-0.03043866172766905,0.04559544045595441,0.0,,
+primary,60,CGM adds beyond context,global,subject_z,normalization effect on the increment,0.1733009905485627,0.1169243130137903,0.25946442893979754,9.999000099990002e-05,1.0,0.00019998000199980003,ADDS
+primary,60,context adds beyond CGM,global,subject_z,normalization effect on the increment,-0.14196737202465715,-0.30679055943807976,0.061655092740361774,0.1907809219078092,0.0,0.1907809219078092,INCONCLUSIVE
+primary,120,CGM adds beyond context,global,subject_z,normalization effect on the increment,0.07791978531537737,0.04547003888384609,0.12993175788120742,9.999000099990002e-05,1.0,,
+primary,120,context adds beyond CGM,global,subject_z,normalization effect on the increment,-0.18506603599098215,-0.3410691972511122,-0.008265325254611993,0.056394360563943605,0.0,,

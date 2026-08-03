@@ -1,0 +1,4 @@
+diag,group,n_participants,n_meals,meals_per_participant,y30_mean,y30_sd,y60_mean,y60_sd,y120_mean,y120_sd
+0,healthy,11,252,22.9,129.0,31.3,134.9,39.8,127.4,34.7
+1,prediabetes,16,343,21.4,139.9,33.2,155.5,42.0,151.5,40.1
+2,t2d,13,318,24.5,170.8,54.0,198.7,63.9,197.5,63.5

@@ -1,0 +1,71 @@
+{
+  "experiment": "E2b_deep_premeal_center_arm",
+  "extends": {
+    "experiment": "E2_deep_normalization_sensitivity",
+    "files": {
+      "raw": "deep_sens_raw.csv",
+      "oof": "deep_sens_oof.csv",
+      "manifest": "deep_sens_manifest.json"
+    },
+    "data_hash": "eb7a92ffb0f69190",
+    "code_hash": {
+      "deep_sens_run.py": "d82dfedabf6b8460",
+      "deep_sens_models.py": "369d65cf202b76b7",
+      "e1_normalizers.py": "4e007b414d5f9d1f",
+      "lightdl_models.py": "740a3e765d6c9d15",
+      "lightdl_data.py": "96faddbf509eb052",
+      "foldwise_normalizer.py": "5063396fb4b96d38",
+      "common_corrected.py": "ef088e84e455bab0"
+    }
+  },
+  "data_hash": "eb7a92ffb0f69190",
+  "new_arm": "premeal_center",
+  "arm_properties": {
+    "premeal_center": {
+      "level_preserved": false,
+      "leakage": false,
+      "label": "Causal pre-meal centering"
+    }
+  },
+  "reference_arm": "global",
+  "fitted_configs": [
+    "cgm",
+    "cgm_static"
+  ],
+  "aliased_configs": [
+    "static_all",
+    "persistence_5min"
+  ],
+  "aliasing_note": "static_all and persistence_5min are COPIED from E2's reference-arm cells, not refitted -- statics are identical across arms by construction and the copy keeps the CGM-free control exactly invariant across all three arms.",
+  "n_seeds": 15,
+  "n_folds": 5,
+  "base_seed": 42,
+  "epochs": 100,
+  "patience": 10,
+  "batch": 32,
+  "clean": "capped",
+  "n_params": {
+    "cgm": 11939,
+    "static_all": 1747,
+    "cgm_static": 13555
+  },
+  "code_hash": {
+    "deep_sens_run.py": "d82dfedabf6b8460",
+    "deep_sens_models.py": "369d65cf202b76b7",
+    "e1_normalizers.py": "4e007b414d5f9d1f",
+    "lightdl_models.py": "740a3e765d6c9d15",
+    "lightdl_data.py": "96faddbf509eb052",
+    "foldwise_normalizer.py": "5063396fb4b96d38",
+    "common_corrected.py": "ef088e84e455bab0"
+  },
+  "env": {
+    "python": "3.12.3",
+    "numpy": "2.1.2",
+    "pandas": "3.0.5",
+    "tensorflow": "2.21.0",
+    "gpus": [
+      "/physical_device:GPU:0"
+    ],
+    "host": "79db307d42d7"
+  }
+}

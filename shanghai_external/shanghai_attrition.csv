@@ -1,0 +1,9 @@
+stage,n
+meal_events,3802
+no_meal_type,182
+meal_too_close_before,22
+meal_within_horizon,153
+incomplete_pre_window,28
+missing_target,64
+kept,3353
+dropped_sparse_patient_meals,0

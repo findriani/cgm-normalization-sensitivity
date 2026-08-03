@@ -1,0 +1,15 @@
+family,increment,with,without,dR2_60,half_obs,half_floor,equiv_attainable,seeds_needed_for_equiv,verdict
+primary,cnn_gru__concat: w10_1min vs full 60-min window,cnn_gru__concat@w10_1min,cnn_gru__concat@w60,0.013129346000606352,0.01239440174332812,0.0,True,47.0,INCONCLUSIVE
+primary,sa__concat: w10_1min vs full 60-min window,sa__concat@w10_1min,sa__concat@w60,0.002570797113529571,0.0110366261673039,0.0,True,9.0,NEGLIGIBLE
+primary,dl_current: w10_1min vs full 60-min window,dl_current@w10_1min,dl_current@w60,-0.0019911016198721275,0.013121065800791538,0.0,True,11.0,NEGLIGIBLE
+primary,cnn_gru__concat: w10_5min vs full 60-min window,cnn_gru__concat@w10_5min,cnn_gru__concat@w60,0.00983178460427938,0.017780683278966695,0.011562005389924766,False,,INCONCLUSIVE
+primary,sa__concat: w10_5min vs full 60-min window,sa__concat@w10_5min,sa__concat@w60,0.007404810533680529,0.012181807469984908,0.0,True,13.0,INCONCLUSIVE
+primary,dl_current: w10_5min vs full 60-min window,dl_current@w10_5min,dl_current@w60,-0.0016726661764497118,0.012940785579737693,0.0023892937579781683,True,8.0,NEGLIGIBLE
+secondary,cnn_gru__concat: last 5 min vs full window,cnn_gru__concat@w5_1min,cnn_gru__concat@w60,0.026867331098651876,0.016165454807224314,0.010994924774107418,False,,ADDS(small)
+secondary,sa__concat: last 5 min vs full window,sa__concat@w5_1min,sa__concat@w60,0.00032694645650815023,0.012029457030095649,0.0,True,6.0,NEGLIGIBLE
+secondary,dl_current: last 5 min vs full window,dl_current@w5_1min,dl_current@w60,-0.01323188437187795,0.018716474092723735,0.011253388518529464,False,,INCONCLUSIVE
+secondary,cnn_gru__concat: 1-min vs 5-min sampling of the same 10 min,cnn_gru__concat@w10_1min,cnn_gru__concat@w10_5min,0.0032975613963269726,0.014680706676308592,0.006479958939665973,True,10.0,NEGLIGIBLE
+secondary,sa__concat: 1-min vs 5-min sampling of the same 10 min,sa__concat@w10_1min,sa__concat@w10_5min,-0.004834013420150956,0.013584453862365653,0.0022245521663452764,True,11.0,INCONCLUSIVE
+secondary,dl_current: 1-min vs 5-min sampling of the same 10 min,dl_current@w10_1min,dl_current@w10_5min,-0.0003184354434224177,0.011881217468637576,0.0,True,8.0,NEGLIGIBLE
+secondary,RF: does the non-DL model agree?,rf_highres@w10_1min,rf_highres@w60,0.01938550443108654,0.013631822595072252,0.014573328627952414,False,,INCONCLUSIVE
+secondary,sanity: DL beats the persistence floor,cnn_gru__concat@w60,persistence_5min,0.5424162638552579,0.15971631909000975,0.2372746299826511,False,,ADDS

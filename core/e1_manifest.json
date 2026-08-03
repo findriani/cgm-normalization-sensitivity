@@ -1,0 +1,67 @@
+{
+  "data_hash": "eb7a92ffb0f69190",
+  "protocols": [
+    "global",
+    "subject_scale",
+    "premeal_center",
+    "subject_center",
+    "subject_z"
+  ],
+  "properties": {
+    "global": {
+      "level_preserved": true,
+      "leakage": false,
+      "label": "Fold-wise global (corrected)"
+    },
+    "subject_scale": {
+      "level_preserved": true,
+      "leakage": true,
+      "label": "Per-subject scaling only"
+    },
+    "premeal_center": {
+      "level_preserved": false,
+      "leakage": false,
+      "label": "Causal pre-meal centering"
+    },
+    "subject_center": {
+      "level_preserved": false,
+      "leakage": true,
+      "label": "Per-subject centering only"
+    },
+    "subject_z": {
+      "level_preserved": false,
+      "leakage": true,
+      "label": "Per-subject z-score (as published)"
+    }
+  },
+  "configs": [
+    "persistence_5min",
+    "cgm",
+    "static_all",
+    "cgm_static"
+  ],
+  "n_seeds": 8,
+  "n_folds": 5,
+  "base_seed": 42,
+  "rf_trees": 300,
+  "clean": "capped",
+  "meal_caps": {
+    "calories": 2000.0,
+    "carbs": 300.0,
+    "protein": 200.0,
+    "fat": 150.0,
+    "fiber": 80.0
+  },
+  "code_hash": {
+    "e1_run.py": "3427cf0a81e9a557",
+    "e1_normalizers.py": "4e007b414d5f9d1f",
+    "ablation_run.py": "e8edb3ee26ccfe43",
+    "lightdl_data.py": "96faddbf509eb052",
+    "foldwise_normalizer.py": "5063396fb4b96d38",
+    "common_corrected.py": "ef088e84e455bab0"
+  },
+  "python": "3.14.3",
+  "numpy": "2.4.4",
+  "pandas": "3.0.2",
+  "sklearn": "1.8.0"
+}

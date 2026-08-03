@@ -1,0 +1,18 @@
+family,increment,with,without,dR2_60,half_obs,half_proj,half_floor,seed_share,equiv_attainable,seeds_needed_for_equiv
+primary,readout: attention pooling vs GAP (strict generalization of it),cnn_gru__concat+attnpool,cnn_gru__concat,0.010997540614648076,0.018859169019670323,0.021266677254037202,0.016749220870321567,0.3797169141534483,False,
+primary,"encoder: transformer block vs 2nd conv block, same Conv1D(d,5) front-end",cnn_sa__concat,cnn__concat,0.013836661581845674,0.021976615245563443,0.020314888301883164,0.013056640415683132,0.5869201508258258,False,
+primary,cross-modal: meal branch reads CGM vs meal self-attn (param-matched),cnn_gru__coattn,cnn_gru__coattn_ctl,0.005433977441528716,0.01319712894055931,0.013520393032038372,0.0,1.0504982731781893,True,13.0
+secondary,does the readout effect generalize to a 2nd encoder (pre-declared guard),cnn__concat+attnpool,cnn__concat,-0.005608176862324331,0.013958442390778068,0.015334976167004622,0.0,1.2658612405317864,True,18.0
+secondary,"decomposition: the extra meal branch + wider head, WITHOUT the direction",cnn_gru__coattn_ctl,cnn_gru__xattn,0.00481307688295534,0.015306667542285737,0.014899803819909659,0.002418356055758258,0.9736561415161625,True,15.0
+secondary,UNMATCHED: branch + direction together (the naive bidirectionality contrast),cnn_gru__coattn,cnn_gru__xattn,0.010247054324484056,0.01555510750789568,0.015853882787081747,0.006394853184960278,0.8372991317512574,True,59.0
+secondary,UNMATCHED: attention replacing the locality prior (architectural alternative),sa__concat,cnn__concat,0.02358106145158203,0.014241624832699116,0.014114441071627995,0.004538587430142813,0.8966015467239429,False,
+secondary,co-attention on top of a self-attention encoder,cnn_sa__coattn,cnn_sa__concat,0.019467439248684826,0.016001151072002173,0.017658398934234796,0.009750004304770906,0.695135422121681,False,
+secondary,bridge: self-attn encoder vs the old reference,cnn_sa__concat,cnn_gru__concat,0.01694631526812374,0.020001942050022734,0.019181634099311628,0.0105513698569952,0.6974156315136414,False,
+secondary,REPLICATION: cnn vs cnn_gru (was +0.030 INCONCL at S=5),cnn__concat,cnn_gru__concat,0.003109653686278063,0.014070793387891797,0.014636409828640784,0.004430208340328073,0.9083823437090865,True,11.0
+secondary,REPLICATION: xattn vs concat (was -0.001 INCONCL at S=5),cnn_gru__xattn,cnn_gru__concat,-9.74394301114526e-05,0.02158337764290227,0.02212130822501283,0.015847068607939104,0.4868122721251982,True,25.0
+secondary,ANCHOR: reproduces the fusion study's dl_current vs RF (+0.069 ADDS),dl_current_highres,rf_highres,0.03893514030632545,0.03854798703488091,0.04059915825458949,0.03796952227614073,0.12534616005599827,False,
+secondary,does the high-res adaptation beat the paper's own model,dl_current_highres,dl_current_binned,0.001289064038736157,0.017281039664775774,0.016260813165756623,0.008786571863923003,0.7080191213939496,True,11.0
+secondary,sanity: DL beats the 5-min persistence floor,cnn_gru__concat,persistence_5min,0.5343014800035549,0.15991561895447573,0.2322129637916138,0.231783415683364,0.0036961831214936927,False,
+external,champion vs the PAPER'S incumbent (the model it would change FROM),cnn_sa__coattn,dl_current_binned,0.026746238594392676,0.020811294710924622,0.01961613469328181,0.014931170450413147,0.4206235521943688,False,
+external,champion vs the protocol-matched high-res incumbent,cnn_sa__coattn,dl_current_highres,0.02545717455565652,0.017757140652402505,0.01792214350965072,0.013045046904222014,0.47020068944115573,False,
+external,champion vs RF,cnn_sa__coattn,rf_highres,0.06439231486198196,0.0344614278859751,0.03882869117580635,0.03676731996662439,0.10335930559417876,False,

@@ -1,0 +1,31 @@
+{
+  "data_hash": "6b18235e2e3f36009572db356655b220",
+  "configs": [
+    "persistence_1min",
+    "persistence_5min",
+    "cgm",
+    "dyn",
+    "person",
+    "meal",
+    "static_all",
+    "cgm_dyn",
+    "cgm_person",
+    "cgm_meal",
+    "cgm_person_meal",
+    "cgm_static",
+    "full"
+  ],
+  "n_seeds": 8,
+  "n_folds": 5,
+  "estimator": "rf",
+  "rf_trees": 300,
+  "clean": "capped",
+  "meal_caps": {
+    "calories": 2000.0,
+    "carbs": 300.0,
+    "protein": 200.0,
+    "fat": 150.0,
+    "fiber": 80.0
+  },
+  "base_seed": 42
+}

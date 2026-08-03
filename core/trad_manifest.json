@@ -1,0 +1,48 @@
+{
+  "data_hash_highres": "4c6708440101b01a",
+  "data_hash_binned": "d9d13a02f6ab2280",
+  "n_samples": 913,
+  "n_participants": 40,
+  "n_seeds": 8,
+  "n_folds": 5,
+  "base_seed": 42,
+  "rf_trees": 300,
+  "models": [
+    "dummy_mean",
+    "persistence_5min",
+    "ridge@highres",
+    "svr_rbf@highres",
+    "random_forest@highres",
+    "hist_gbm@highres",
+    "lightgbm@highres",
+    "xgboost@highres",
+    "catboost@highres",
+    "ridge@binned",
+    "random_forest@binned",
+    "hist_gbm@binned"
+  ],
+  "grids": {
+    "ridge": 6,
+    "svr_rbf": 12,
+    "random_forest": 6,
+    "hist_gbm": 4,
+    "lightgbm": 4,
+    "xgboost": 4,
+    "catboost": 4
+  },
+  "code_hash": {
+    "traditional_run.py": "f4f1bb1a8b96327d",
+    "lightdl_data.py": "96faddbf509eb052",
+    "foldwise_normalizer.py": "5063396fb4b96d38",
+    "common_corrected.py": "ef088e84e455bab0"
+  },
+  "python": "3.14.3",
+  "libs": {
+    "lightgbm": "4.7.0",
+    "catboost": "1.2.10",
+    "xgboost": "3.2.0"
+  },
+  "sklearn": "1.8.0",
+  "numpy": "2.4.4",
+  "pandas": "3.0.2"
+}

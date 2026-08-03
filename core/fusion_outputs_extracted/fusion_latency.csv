@@ -1,0 +1,11 @@
+model,n_params,cpu_ms
+bilstm__concat,5476,130.08
+gru__concat,6076,117.98
+cnn__concat,6028,112.81
+cnn_gru__concat,7876,117.14
+tcn__concat,6247,113.24
+cnn_gru__gate,20836,118.57
+cnn_gru__film,8308,118.19
+cnn_gru__xattn,10588,118.24
+cnn_gru__film+nodyn,8308,117.87
+dl_current,15347,120.42

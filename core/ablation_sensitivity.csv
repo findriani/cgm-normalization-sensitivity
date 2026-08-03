@@ -1,0 +1,9 @@
+tag,increment,dR2_60,verdict
+hgb_capped,CGM adds beyond ALL static,0.18818004204578112,ADDS
+hgb_capped,static adds beyond CGM,0.20622632815669212,ADDS
+hgb_capped,activity/HR adds beyond CGM+static,-0.015979576204039964,INCONCLUSIVE
+hgb_capped,meal content adds beyond person+CGM,0.16521919092648238,ADDS
+rf_raw,CGM adds beyond ALL static,0.19623413129562983,ADDS
+rf_raw,static adds beyond CGM,0.1839962848820766,ADDS
+rf_raw,activity/HR adds beyond CGM+static,-0.027785024241000034,HURTS(small)
+rf_raw,meal content adds beyond person+CGM,0.18121195687231845,ADDS

@@ -1,0 +1,15 @@
+model,n_params
+cnn_gru__concat,7876
+cnn_gru__concat+attnpool,8292
+cnn__concat,6028
+cnn_sa__concat,9148
+cnn_gru__coattn_ctl,13804
+cnn_gru__coattn,13804
+cnn__concat+attnpool,6444
+cnn_gru__xattn,10588
+sa__concat,9052
+cnn_sa__coattn,15076
+dl_current_highres,15347
+dl_current_binned,15347
+rf_highres,0
+persistence_5min,0

@@ -1,0 +1,19 @@
+family,horizon,increment,protocol_1,protocol_2,isolates,ddR2,lo,hi,perm_p,seed_pos_frac,holm_p,verdict
+mechanism,30,CGM adds beyond context,subject_scale,subject_z,CENTERING (subject scaling + leakage held fixed),0.2853419475459677,0.19635003873464368,0.39568904655625314,9.999000099990002e-05,1.0,,
+mechanism,30,CGM adds beyond context,subject_center,subject_z,SCALING (subject centering held fixed),0.07606439277855158,0.04378202797529685,0.11390996393021971,9.999000099990002e-05,1.0,,
+mechanism,30,CGM adds beyond context,global,premeal_center,causal LEVEL REMOVAL (no leakage in either arm),0.5949622357800038,0.526000111944241,0.672031109390682,9.999000099990002e-05,1.0,,
+mechanism,30,context adds beyond CGM,subject_scale,subject_z,CENTERING (subject scaling + leakage held fixed),-0.07549972246295901,-0.18062458675055243,0.03383728126394609,0.18908109189081093,0.0,,
+mechanism,30,context adds beyond CGM,subject_center,subject_z,SCALING (subject centering held fixed),-0.036954872399958275,-0.08441003654391113,0.006990044907223882,0.10618938106189381,0.0,,
+mechanism,30,context adds beyond CGM,global,premeal_center,causal LEVEL REMOVAL (no leakage in either arm),-0.04534256869163404,-0.11736298736650715,0.028904589563717203,0.2455754424557544,0.0,,
+mechanism,60,CGM adds beyond context,subject_scale,subject_z,CENTERING (subject scaling + leakage held fixed),0.21151495536806295,0.11429026461648602,0.331153215112729,9.999000099990002e-05,1.0,0.0005999400059994001,ADDS
+mechanism,60,CGM adds beyond context,subject_center,subject_z,SCALING (subject centering held fixed),0.0361806224752345,0.007774682697762854,0.07403497159742616,0.013998600139986002,1.0,0.05599440055994401,INCONCLUSIVE
+mechanism,60,CGM adds beyond context,global,premeal_center,causal LEVEL REMOVAL (no leakage in either arm),0.3645497375001025,0.28942194273489263,0.4454302865037544,9.999000099990002e-05,1.0,0.0005999400059994001,ADDS
+mechanism,60,context adds beyond CGM,subject_scale,subject_z,CENTERING (subject scaling + leakage held fixed),-0.03264848308907386,-0.13731346775437236,0.08532250557609919,0.5849415058494151,0.125,1.0,INCONCLUSIVE
+mechanism,60,context adds beyond CGM,subject_center,subject_z,SCALING (subject centering held fixed),-0.010534563998319367,-0.05560897883776932,0.03538440821104675,0.6603339666033397,0.25,1.0,INCONCLUSIVE
+mechanism,60,context adds beyond CGM,global,premeal_center,causal LEVEL REMOVAL (no leakage in either arm),-0.008930006469654151,-0.09266278379147551,0.0766207394059886,0.8422157784221578,0.375,1.0,INCONCLUSIVE
+mechanism,120,CGM adds beyond context,subject_scale,subject_z,CENTERING (subject scaling + leakage held fixed),0.18689410456298586,0.08864264810666098,0.3148381926171701,0.00029997000299970003,1.0,,
+mechanism,120,CGM adds beyond context,subject_center,subject_z,SCALING (subject centering held fixed),0.008370119256402239,-0.01051071640297528,0.03354077674197467,0.547945205479452,0.75,,
+mechanism,120,CGM adds beyond context,global,premeal_center,causal LEVEL REMOVAL (no leakage in either arm),0.18326371834250885,0.1108795957633493,0.26764152120253726,9.999000099990002e-05,1.0,,
+mechanism,120,context adds beyond CGM,subject_scale,subject_z,CENTERING (subject scaling + leakage held fixed),-0.04247825261304567,-0.1563464991182013,0.0872020603640976,0.5098490150984901,0.125,,
+mechanism,120,context adds beyond CGM,subject_center,subject_z,SCALING (subject centering held fixed),-0.017900629985612364,-0.06062843773675743,0.022361737918287373,0.39916008399160086,0.0,,
+mechanism,120,context adds beyond CGM,global,premeal_center,causal LEVEL REMOVAL (no leakage in either arm),-0.07375428620178179,-0.16020040120747736,0.01290499786167618,0.09979002099790021,0.0,,
