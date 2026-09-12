@@ -4,8 +4,9 @@ window_run.py  -- REFIT on shortened pre-meal windows
 Follow-up to the attention run. The occlusion sweep there showed that blanking minutes
 1-55 of the 60-min pre-meal window SIGNIFICANTLY IMPROVES every conv/GRU model
 (+0.013..+0.016 R2_60, CI excludes 0). But occlusion feeds an off-distribution input to a
-model fitted on the full window, so it upper-bounds what the model USED. This study asks
-the question properly: REFIT from scratch on a short window and compare.
+model fitted on the full window, so it measures fixed-model perturbation sensitivity
+rather than information content. This study asks the question properly: REFIT from
+scratch on a short window and compare.
 
 Protocol is byte-identical to attn_run.py (same splits from make_repeated_splits with
 base_seed=42, same per-fold FoldNormalizer, mg/dL targets, per-sample OOF, same early
@@ -72,6 +73,10 @@ CARD_CSV, MANIFEST = f"window_model_cards_{TAG}.csv", f"window_manifest_{TAG}.js
 OUT_FILES = (RAW_CSV, OOF_CSV, CARD_CSV)
 
 # ---- windows: index arrays into the 60 one-minute slots (59 = last before the meal) ----
+# NOTE: w10_1min covers indices 50-59 (t = -10 to -1, 10 readings, 9 intervals).
+#       w10_5min covers indices 49, 54, 59 (t = -11, -6, -1, 3 readings, 10 intervals).
+#       Their endpoints differ (50 vs 49), so they are NOT two samplings of the
+#       same interval.  A direct resolution comparison is therefore invalid.
 WINDOWS = {
     "w60":      np.arange(60),
     "w10_1min": np.arange(50, 60),

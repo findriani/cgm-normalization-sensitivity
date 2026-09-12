@@ -64,8 +64,8 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-CORE = os.path.join(ROOT, "data preprocessed", "core")
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+CORE = os.path.join(ROOT, "data preprocessed", "rerun_corrected")
 SHA = os.path.join(ROOT, "data preprocessed", "shanghai_external")
 
 CGM_INC = "CGM adds beyond context"
@@ -103,8 +103,8 @@ plt.rcParams.update({
     "font.family": "serif",
     "font.serif": ["Times New Roman", "STIXGeneral", "DejaVu Serif"],
     "mathtext.fontset": "stix",
-    "font.size": 8, "axes.labelsize": 8, "xtick.labelsize": 7.5,
-    "ytick.labelsize": 8, "legend.fontsize": 7,
+    "font.size": 9, "axes.labelsize": 9, "xtick.labelsize": 8.5,
+    "ytick.labelsize": 9, "legend.fontsize": 8,
     "axes.edgecolor": MUTED, "axes.labelcolor": INK,
     "xtick.color": MUTED, "ytick.color": INK,
     "figure.facecolor": "white", "axes.facecolor": "white",
@@ -183,7 +183,7 @@ def main():
         # Muted and small on purpose: these are point ratios of point estimates and carry no
         # interval, so they must not read as estimates competing with the plotted CIs.
         axL.annotate(f"$-${cut:.0%}", xy=(lx, y), ha=ha, va="center",
-                     fontsize=6.5, color=MUTED, zorder=5,
+                     fontsize=7, color=MUTED, zorder=5,
                      bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.9))
 
         dot(axL, *ref, y + dodge, C_REF, "o")
@@ -196,21 +196,21 @@ def main():
     # above it. At 5.15 in a panel is about 1.9 in wide, the titles need two lines to fit,
     # and a floating "(a)" above a two-line title collided with it.
     for ax, title, xlabel in (
-            (axL, "(a)  CGM's measured\ncontribution, by arm",
+            (axL, "(a)  CGM's measured\ncontribution, by condition",
              r"$\Delta R^2$, CGM beyond context  (95% CI)"),
             (axR, "(b)  Effect of normalization\non the increment",
              r"$\Delta\Delta R^2$ = global $-$ subject $z$  (95% CI)")):
         ax.axvline(0, color=MUTED, lw=0.8, ls=(0, (3, 2.4)), zorder=1)
         ax.axhline(len(rows) - 3.5, color=MUTED, lw=0.6, alpha=0.55, zorder=1)
-        ax.set_title(title, fontsize=8, color=INK, pad=4, weight="bold",
-                     linespacing=1.35)
+        ax.set_title(title, fontsize=9, color=INK, pad=4, weight="bold",
+                     linespacing=1.3)
         ax.set_xlabel(xlabel, labelpad=4)
         ax.xaxis.grid(True, color=GRID, lw=0.5)
         ax.set_axisbelow(True)
         ax.tick_params(axis="y", length=0)
         for s in ("top", "right", "left"):
             ax.spines[s].set_visible(False)
-        ax.set_ylim(-0.75, len(rows) - 0.25)
+        ax.set_ylim(-0.65, len(rows) - 0.25)
 
     axL.set_yticks(range(len(rows)))
     axL.set_yticklabels([f"{h} min" for _, h in rows][::-1])
@@ -221,12 +221,12 @@ def main():
 
     # Direction cue for the right panel's sign convention, placed where it cannot be missed
     # and cannot collide with data: below the axis, under the two halves of the scale.
-    axR.annotate("attenuation $\\rightarrow$", xy=(0.985, -0.205),
+    axR.annotate("attenuation $\\rightarrow$", xy=(0.985, -0.195),
                  xycoords="axes fraction", ha="right", va="top",
-                 fontsize=6.5, color=MUTED, style="italic")
-    axR.annotate("$\\leftarrow$ inflation", xy=(0.015, -0.205),
+                 fontsize=7, color=MUTED, style="italic")
+    axR.annotate("$\\leftarrow$ inflation", xy=(0.015, -0.195),
                  xycoords="axes fraction", ha="left", va="top",
-                 fontsize=6.5, color=MUTED, style="italic")
+                 fontsize=7, color=MUTED, style="italic")
 
     # Cohort brackets, far left and rotated -- the same idiom as the companion figure.
     # Reading right to left: the y-axis labels, then the bracket at -0.20, then the rotated
@@ -235,12 +235,12 @@ def main():
     # Brackets hug their group (+/-0.30 against a 0.19 dodge) rather than floating past it.
     for label, idx in [(COHORTS[0][1], [0, 1, 2]), (COHORTS[1][1], [3, 4, 5])]:
         ys = [ypos[rows[i]] for i in idx]
-        axL.annotate("", xy=(-0.26, min(ys) - 0.30), xytext=(-0.26, max(ys) + 0.30),
+        axL.annotate("", xy=(-0.22, min(ys) - 0.28), xytext=(-0.22, max(ys) + 0.28),
                      xycoords=("axes fraction", "data"),
                      arrowprops=dict(arrowstyle="-", color=GRID, lw=1.4))
-        axL.annotate(label, xy=(-0.46, np.mean(ys)),
+        axL.annotate(label, xy=(-0.36, np.mean(ys)),
                      xycoords=("axes fraction", "data"),
-                     ha="center", va="center", fontsize=7, color=MUTED,
+                     ha="center", va="center", fontsize=7.5, color=MUTED,
                      weight="bold", rotation=90)
 
     hL = [Line2D([], [], color=C_REF, marker="o", ms=5.0, lw=1.2,
@@ -261,18 +261,20 @@ def main():
     # side by side in one row they merged into what looked like a single four-item legend,
     # which broke the association between a series and the panel it appears in.
     fig.legend(handles=hL, loc="upper center", ncol=1, frameon=False,
-               title="(a)  normalization arm", alignment="left",
-               bbox_to_anchor=(0.34, 0.185), handletextpad=0.5)
+               title="(a)  normalization condition", alignment="left",
+               bbox_to_anchor=(0.32, 0.19), handletextpad=0.5)
     fig.legend(handles=hR, loc="upper center", ncol=1, frameon=False,
                title="(b)  increment tested", alignment="left",
-               bbox_to_anchor=(0.76, 0.185), handletextpad=0.5)
+               bbox_to_anchor=(0.76, 0.19), handletextpad=0.5)
 
-    fig.subplots_adjust(left=0.245, right=0.985, top=0.875, bottom=0.315, wspace=0.09)
+    fig.subplots_adjust(left=0.20, right=0.985, top=0.875, bottom=0.315, wspace=0.10)
 
     # NO bbox_inches="tight" -- it crops to the ink, and `width=\textwidth` then scales the
     # smaller canvas back up, silently undoing the point of building at final size.
+    outdir = os.path.join(ROOT, "revision", "rev6", "temp")
+    os.makedirs(outdir, exist_ok=True)
     for ext, dpi in (("pdf", 600), ("png", 600)):
-        out = os.path.join(HERE, f"fig_cross_cohort.{ext}")
+        out = os.path.join(outdir, f"fig_cross_cohort.{ext}")
         fig.savefig(out, dpi=dpi, facecolor="white")
         print(f"wrote {out}  ({'vector' if ext == 'pdf' else f'{dpi} dpi raster'})")
 

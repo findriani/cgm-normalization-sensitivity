@@ -42,10 +42,12 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-E1 = os.path.join(ROOT, "data preprocessed", "core", "e1_figure_data.csv")
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+E1 = os.path.join(ROOT, "data preprocessed", "rerun_corrected", "e1_figure_data.csv")
 E2 = os.path.join(ROOT, "data preprocessed", "normalization_sensitivity",
                   "deep_sens_increments.csv")
+E2_PMC = os.path.join(ROOT, "data preprocessed", "normalization_sensitivity",
+                      "deep_sens_pmc_increments.csv")
 HORIZON = 60
 
 C_RF = "#1B6CA8"        # validated categorical pair -- do not substitute by eye
@@ -88,16 +90,16 @@ plt.rcParams.update({
     "font.family": "serif",
     "font.serif": ["Times New Roman", "STIXGeneral", "DejaVu Serif"],
     "mathtext.fontset": "stix",
-    "font.size": 8, "axes.labelsize": 8, "xtick.labelsize": 7.5,
-    "ytick.labelsize": 8, "legend.fontsize": 7.5,
+    "font.size": 9, "axes.labelsize": 9, "xtick.labelsize": 8.5,
+    "ytick.labelsize": 9, "legend.fontsize": 8.5,
     "axes.edgecolor": MUTED, "axes.labelcolor": INK,
     "xtick.color": MUTED, "ytick.color": INK,
     "figure.facecolor": "white", "axes.facecolor": "white",
     "pdf.fonttype": 42, "ps.fonttype": 42,      # embed real text, not outlines
 })
 
-W_IN, H_IN = 5.15, 3.9           # 5.15 in == sn-jnl \textwidth, measured
-MS_RF, MS_DL, LW = 5.0, 4.6, 1.2  # marker and whisker sizes, scaled with the type
+W_IN, H_IN = 5.15, 3.6           # 5.15 in == sn-jnl \textwidth, measured
+MS_RF, MS_DL, LW = 5.5, 5.0, 1.3  # marker and whisker sizes
 
 
 def load():
@@ -105,18 +107,23 @@ def load():
     e1 = e1[(e1.kind == "within_arm") & (e1.horizon == HORIZON)]
     e2 = pd.read_csv(E2)
     e2 = e2[e2.horizon == HORIZON]
+    # Merge premeal_center deep model results (E2b)
+    if os.path.exists(E2_PMC):
+        pmc = pd.read_csv(E2_PMC)
+        pmc = pmc[(pmc.horizon == HORIZON) & (pmc.arm == "premeal_center")]
+        e2 = pd.concat([e2, pmc], ignore_index=True)
     return e1, e2
 
 
 def main():
     e1, e2 = load()
     ypos = {a: len(ARMS) - 1 - i for i, (a, _, _) in enumerate(ARMS)}
-    dodge = 0.21          # wider than before: at 5 pt markers, 0.17 rows let them touch
+    dodge = 0.22
 
-    fig, axes = plt.subplots(1, 2, figsize=(W_IN, H_IN), sharey=True, sharex=True)
+    fig, axes = plt.subplots(1, 2, figsize=(W_IN, H_IN), sharey=True, sharex=False)
 
-    lo_all, hi_all = [], []
     for ax, (inc, title) in zip(axes, PANELS):
+        lo_pan, hi_pan = [], []
         for arm, _, _ in ARMS:
             y = ypos[arm]
 
@@ -127,7 +134,7 @@ def main():
                         solid_capstyle="butt", zorder=3)
                 ax.plot(r.estimate, y + dodge, "o", ms=MS_RF, color=C_RF,
                         markeredgecolor="white", markeredgewidth=0.8, zorder=4)
-                lo_all.append(r.lo); hi_all.append(r.hi)
+                lo_pan.append(r.lo); hi_pan.append(r.hi)
 
             d = e2[(e2.arm == arm) & (e2.increment == inc)]
             if not d.empty:
@@ -136,63 +143,62 @@ def main():
                         solid_capstyle="butt", zorder=3)
                 ax.plot(d.dR2, y - dodge, "s", ms=MS_DL, color=C_DL,
                         markeredgecolor="white", markeredgewidth=0.8, zorder=4)
-                lo_all.append(d.lo); hi_all.append(d.hi)
+                lo_pan.append(d.lo); hi_pan.append(d.hi)
 
         ax.axvline(0, color=MUTED, lw=0.8, ls=(0, (3, 2.4)), zorder=1)
         ax.axhline(len(ARMS) - 2.5, color=MUTED, lw=0.6, alpha=0.55, zorder=1)
-        ax.set_title(title, fontsize=8.5, color=INK, pad=6, weight="bold")
+        ax.set_title(title, fontsize=9.5, color=INK, pad=6, weight="bold")
         ax.set_xlabel(r"$\Delta R^2$ at 60 min  (95% CI)", labelpad=4)
         ax.xaxis.grid(True, color=GRID, lw=0.5)
         ax.set_axisbelow(True)
-        ax.tick_params(axis="y", length=0)          # stray dashes beside the labels
+        ax.tick_params(axis="y", length=0)
         for s in ("top", "right", "left"):
             ax.spines[s].set_visible(False)
+        # Each panel gets its own x-range — no wasted space
+        pad = 0.06 * (max(hi_pan) - min(lo_pan))
+        ax.set_xlim(min(lo_pan) - pad, max(hi_pan) + pad)
 
     ax = axes[0]
     ax.set_yticks(range(len(ARMS)))
     ax.set_yticklabels([lab for _, lab, _ in ARMS][::-1])
-    # premeal_center is the arm a reader stops at -- no leakage, and it still collapses.
     for t in ax.get_yticklabels():
         if "Pre-meal" in t.get_text():
             t.set_weight("bold")
-    ax.set_ylim(-0.75, len(ARMS) - 0.25)
+    ax.set_ylim(-0.65, len(ARMS) - 0.25)
 
-    pad = 0.05 * (max(hi_all) - min(lo_all))
-    axes[0].set_xlim(min(lo_all) - pad, max(hi_all) + pad)
-
-    # Group brackets, far left and rotated. They must clear the two-line tick labels:
-    # centred horizontal text collided with "Subject centering", whose row is exactly the
-    # mean of the level-removed group.
-    for label, rows in [("LEVEL PRESERVED", [0, 1]), ("LEVEL REMOVED", [2, 3, 4])]:
+    # Group brackets
+    for label, rows in [("LEVEL\nPRESERVED", [0, 1]), ("LEVEL\nREMOVED", [2, 3, 4])]:
         ys = [ypos[ARMS[i][0]] for i in rows]
-        lo_y, hi_y = min(ys) - 0.42, max(ys) + 0.42
-        axes[0].annotate("", xy=(-0.475, lo_y), xytext=(-0.475, hi_y),
+        lo_y, hi_y = min(ys) - 0.38, max(ys) + 0.38
+        axes[0].annotate("", xy=(-0.42, lo_y), xytext=(-0.42, hi_y),
                          xycoords=("axes fraction", "data"),
                          arrowprops=dict(arrowstyle="-", color=GRID, lw=1.4))
-        axes[0].annotate(label, xy=(-0.525, np.mean(ys)),
+        axes[0].annotate(label, xy=(-0.49, np.mean(ys)),
                          xycoords=("axes fraction", "data"),
-                         ha="center", va="center", fontsize=6.5, color=MUTED,
-                         weight="bold", rotation=90)
+                         ha="center", va="center", fontsize=7, color=MUTED,
+                         weight="bold", rotation=90, linespacing=1.1)
 
     handles = [
         Line2D([], [], color=C_RF, marker="o", ms=MS_RF, lw=LW,
                markeredgecolor="white", markeredgewidth=0.8,
-               label="Random Forest (E1, 8 seeds)"),
+               label="Random Forest (8 seeds)"),
         Line2D([], [], color=C_DL, marker="s", ms=MS_DL, lw=LW,
                markeredgecolor="white", markeredgewidth=0.8,
-               label="Deep mid-fusion (E2, 15 seeds)"),
+               label="Deep mid-fusion (15 seeds)"),
     ]
     fig.legend(handles=handles, loc="lower center", ncol=2, frameon=False,
-               bbox_to_anchor=(0.5, -0.012), handletextpad=0.5, columnspacing=1.8)
+               bbox_to_anchor=(0.55, -0.005), handletextpad=0.5, columnspacing=1.8)
 
-    fig.subplots_adjust(left=0.32, right=0.985, top=0.90, bottom=0.19, wspace=0.07)
+    fig.subplots_adjust(left=0.28, right=0.985, top=0.90, bottom=0.19, wspace=0.12)
 
     # NO bbox_inches="tight". It crops to the ink and would have emitted a 4.68 in canvas,
     # which `width=\textwidth` then scales back UP by 1.10 -- silently undoing the point of
     # building at final size. Margins are set by subplots_adjust instead, so the saved page
     # is exactly W_IN wide and the scale factor in LaTeX is 1.00.
+    outdir = os.path.join(ROOT, "revision", "rev6", "temp")
+    os.makedirs(outdir, exist_ok=True)
     for ext, dpi in (("pdf", 600), ("png", 600)):
-        out = os.path.join(HERE, f"fig_normalization_attribution.{ext}")
+        out = os.path.join(outdir, f"fig_normalization_attribution.{ext}")
         fig.savefig(out, dpi=dpi, facecolor="white")
         print(f"wrote {out}  ({'vector' if ext == 'pdf' else f'{dpi} dpi raster'})")
 

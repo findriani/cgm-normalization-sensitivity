@@ -39,8 +39,8 @@ PRIMARY = [(f"{a}@{w}", f"{a}@{CTRL}", f"{a}: {w} vs full 60-min window")
            for w in ("w10_1min", "w10_5min") for a in ARCHS]
 SECONDARY = (
     [(f"{a}@w5_1min", f"{a}@{CTRL}", f"{a}: last 5 min vs full window") for a in ARCHS]
-    + [(f"{a}@w10_1min", f"{a}@w10_5min", f"{a}: 1-min vs 5-min sampling of the same 10 min")
-       for a in ARCHS]
+    # NOTE: w10_1min (indices 50-59) and w10_5min (indices 49,54,59) have different
+    # endpoints, so a direct resolution comparison is invalid. Removed.
     + [("rf_highres@w10_1min", "rf_highres@w60", "RF: does the non-DL model agree?"),
        ("cnn_gru__concat@w60", "persistence_5min", "sanity: DL beats the persistence floor")]
 )
@@ -125,6 +125,10 @@ def main():
     print(f"  NEGLIGIBLE (|dR2| + CI half-width < {MARGIN_R2}) is the informative outcome here:")
     print(f"  it means the short window loses nothing. INCONCLUSIVE means we cannot tell at")
     print(f"  this precision -- check equiv_attainable before reading anything into it.")
+    print(f"\n  MULTIPLICITY NOTE: Holm correction controls family-wise error for the")
+    print(f"  superiority (ADDS/HURTS) tests. It does NOT cover the multiple pointwise")
+    print(f"  NEGLIGIBLE conclusions. Each equivalence interval is reported separately;")
+    print(f"  do not claim family-wise equivalence across all window contrasts.")
     print(f"\nSaved: window_model_summary_{TAG}.csv, window_verdict_{TAG}.csv, "
           f"window_precision_{TAG}.csv, window_per_seed_r2_{TAG}.csv")
 

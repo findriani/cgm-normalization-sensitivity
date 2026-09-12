@@ -20,15 +20,19 @@ FOUR additions over fusion_analyze.py (PLAN_attention.md §1/§6/§7):
 
   2. EXTERNAL contrasts are SUPERIORITY-ONLY. The measured floor for an unpaired contrast
      at n=40 is ~0.031 > delta=0.02, so "EQUIVALENT" is unattainable at any seed count.
-     decide_external_attn() cannot emit it; the null verdict is NO_DIFFERENCE_DETECTED.
+     decide_external_attn() cannot emit it; the null verdict distinguishes
+     NO_DIFFERENCE_DETECTED from POSITIVE_BUT_UNSTABLE (CI excludes zero and p < 0.05
+     but fewer than 80% of seeds agree).
 
   3. ATTENTION PROFILES with a participant-cluster bootstrap band, built from per-
      participant rows. The band is over PARTICIPANTS (the resampling unit used everywhere
      else in this paper), not over the 75 non-independent fold fits.
 
-  4. OCCLUSION SWEEP -- the faithful, input-level measurement of how much of the 60-min
-     window matters. Attention weights are over encoder states (cumulative for a GRU), so
-     they cannot support a raw-minute claim on their own. This table can.
+  4. OCCLUSION SWEEP -- a fixed-model CGM perturbation sensitivity analysis. Occluded
+     inputs are off-distribution, so the loss reflects model sensitivity rather than
+     information content. Attention weights are over encoder states (cumulative for a
+     GRU), so they cannot support a raw-minute claim on their own. The refit study
+     (window_run.py) provides the direct window-length evidence.
 
 Outputs (all suffixed by tag; TAG!=raw is SENSITIVITY-ONLY and never overwrites the
 confirmatory files): attn_model_summary_<tag>.csv, attn_per_seed_r2_<tag>.csv,
@@ -111,11 +115,19 @@ def decide_external_attn(point, lo, hi, p, seed_pos):
     """SUPERIORITY ONLY. 'EQUIVALENT' is deliberately NOT reachable: the measured n=40
     floor for an unpaired contrast (~0.031) exceeds delta=0.02, so no seed count could
     justify that claim (PLAN_attention.md §1). The losing side is named REFERENCE_WINS,
-    not INCUMBENT_WINS -- one of these comparators is a random forest."""
+    not INCUMBENT_WINS -- one of these comparators is a random forest.
+
+    POSITIVE_BUT_UNSTABLE / NEGATIVE_BUT_UNSTABLE: CI excludes zero and p < 0.05 but
+    the verdict is POSITIVE_BUT_UNSTABLE / NEGATIVE_BUT_UNSTABLE rather than
+    ATTN_WINS / REFERENCE_WINS because fewer than 80% of seeds agree in direction."""
     if point > 0 and lo > 0 and p < 0.05 and seed_pos >= WIN_FRAC:
         return "ATTN_WINS" if lo > MARGIN_R2 else "ATTN_WINS(small)"
     if point < 0 and hi < 0 and p < 0.05 and (1.0 - seed_pos) >= WIN_FRAC:
         return "REFERENCE_WINS" if hi < -MARGIN_R2 else "REFERENCE_WINS(small)"
+    if point > 0 and lo > 0 and p < 0.05:
+        return "POSITIVE_BUT_UNSTABLE"
+    if point < 0 and hi < 0 and p < 0.05:
+        return "NEGATIVE_BUT_UNSTABLE"
     return "NO_DIFFERENCE_DETECTED"
 
 
@@ -143,20 +155,29 @@ def precision_decomp(ref, a, b, point):
     Dsj = np.array([[(Eb[k] - Ea[k])[idx_by[u]].sum() for u in units] for k in range(S)])
     var_tot = float(Dsj.mean(axis=0).var(ddof=1))
     sig2_e = float(np.mean(Dsj.var(axis=0, ddof=1))) if S > 1 else 0.0
-    var_mu = max(var_tot - sig2_e / S, 0.0)
+    var_mu_raw = var_tot - sig2_e / S
+    var_mu = max(var_mu_raw, 0.0)
+    # When var_mu_raw < 0 the participant component was clipped to zero, making
+    # seed_share > 1 and floor/seeds_needed unreliable.  Mark them unavailable.
+    boundary_estimate = var_mu_raw < 0
 
     def half(n):
         return 1.96 * np.sqrt(J * (var_mu + sig2_e / max(n, 1e-9))) / SS
 
     slack = MARGIN_R2 - abs(point)                     # room left for the CI half-width
-    floor = half(np.inf)
-    attainable = bool(slack > floor)
-    need = np.nan
-    if attainable and slack > 0:
-        C = ((slack * SS) / 1.96) ** 2 / J             # required Var_j(D_j)
-        need = float(np.ceil(sig2_e / (C - var_mu))) if C > var_mu and sig2_e > 0 else float(S)
-    return {"half_proj": float(half(S)), "half_floor": float(floor),
-            "seed_share": float((sig2_e / S) / var_tot) if var_tot > 0 else np.nan,
+    if boundary_estimate:
+        floor = np.nan
+        attainable = False
+        need = np.nan
+    else:
+        floor = half(np.inf)
+        attainable = bool(slack > floor)
+        need = np.nan
+        if attainable and slack > 0:
+            C = ((slack * SS) / 1.96) ** 2 / J         # required Var_j(D_j)
+            need = float(np.ceil(sig2_e / (C - var_mu))) if C > var_mu and sig2_e > 0 else float(S)
+    return {"half_proj": float(half(S)), "half_floor": float(floor) if not boundary_estimate else np.nan,
+            "seed_share": float((sig2_e / S) / var_tot) if var_tot > 0 and not boundary_estimate else np.nan,
             "equiv_attainable": attainable, "seeds_needed_for_equiv": need}
 
 
@@ -221,15 +242,39 @@ def validate_manifest(configs, seeds, nSamp, raw, oof):
     return man
 
 
-def validate_side_table(path, man, keys, label):
+def validate_side_table(path, man, keys, label, expected_models=None,
+                        expected_seeds=None, expected_rows=None, required=False):
     """Exact completeness check for the profile / occlusion tables: each participant appears
     in exactly one test fold per seed, so every (model, seed[, variant]) group must cover all
-    J participants. Silent partial coverage would bias the curve toward whoever finished."""
+    J participants. Silent partial coverage would bias the curve toward whoever finished.
+
+    When expected_models, expected_seeds, or expected_rows are given, the table is checked
+    against those exact sets/counts.  When required=True, an absent file is an error."""
     if not os.path.exists(path):
+        if required:
+            raise SystemExit(f"[abort] {path} required but absent.")
         print(f"  [{label}] {path} absent -- skipped")
         return None
     d = pd.read_csv(path, dtype={"pid": str})
     J = man["n_participants"]
+    # Check expected models
+    if expected_models is not None:
+        found = set(d.model.unique())
+        if found != set(expected_models):
+            missing = set(expected_models) - found
+            extra = found - set(expected_models)
+            raise SystemExit(f"[abort] {path}: model mismatch. "
+                             f"missing={sorted(missing)}, extra={sorted(extra)}")
+    # Check expected seeds
+    if expected_seeds is not None:
+        found_seeds = set(d.seed.unique())
+        if found_seeds != set(expected_seeds):
+            raise SystemExit(f"[abort] {path}: seed mismatch. "
+                             f"expected={sorted(expected_seeds)}, found={sorted(found_seeds)}")
+    # Check expected row count
+    if expected_rows is not None and len(d) != expected_rows:
+        raise SystemExit(f"[abort] {path}: expected {expected_rows} rows, found {len(d)}.")
+    # Per-group participant coverage
     bad = []
     for k, g in d.groupby(keys):
         if g.pid.nunique() != J:
@@ -312,13 +357,14 @@ def profile_tables(pr, n_boot=N_BOOT):
 # ------------------------- occlusion -------------------------
 def occlusion_table(oc, ystat, n_boot=N_BOOT):
     """R2_60 under raw-window perturbation, with participant-cluster bootstrap CIs on the
-    LOSS relative to the intact window. This is the faithful, architecture-agnostic answer
-    to 'how much of the 60-minute window actually contributes' -- and it applies to models
-    with no attention at all, including the paper's own.
+    LOSS relative to the intact window. This is a fixed-model perturbation sensitivity
+    analysis -- architecture-agnostic and applicable to models with no attention at all,
+    including the paper's own Random Forest.
 
     Caveat to report with it: an occluded window is off-distribution for the fitted model,
-    so the loss is an upper bound on the information the model was USING, not a retraining
-    experiment. A truncation study that refits would answer a slightly different question."""
+    so the loss reflects model sensitivity rather than a guaranteed upper-bound on the
+    information content. A refit study (window_run.py) answers a different question: how
+    much signal is available to a model that only sees the shorter window."""
     pids = np.array(sorted(ystat.index))
     n_j = ystat["n"].reindex(pids).values
     sy = ystat["sum_y"].reindex(pids).values
@@ -373,10 +419,17 @@ def main():
           f"seeds x {N_FOLDS} folds, {nSamp} samples / {man['n_participants']} participants "
           f"(tf {man['tf']}, fit-code {man['code_hash'][:8]}, pos={man['pos_mode']})")
     print(f"  reproducibility: {man.get('deterministic')}")
+    expected_seeds = list(range(man["n_seeds"]))
+    profile_models = man.get("profile_models")
+    occlusion_models = man.get("occlusion_models")
     pr = validate_side_table(f"attn_profiles_{PRIMARY_TAG}.csv", man,
-                             ["model", "seed"], "profiles")
+                             ["model", "seed"], "profiles",
+                             expected_models=profile_models,
+                             expected_seeds=expected_seeds)
     oc = validate_side_table(f"attn_occlusion_{PRIMARY_TAG}.csv", man,
-                             ["model", "seed", "variant"], "occlusion")
+                             ["model", "seed", "variant"], "occlusion",
+                             expected_models=occlusion_models,
+                             expected_seeds=expected_seeds)
 
     ps_all = pd.concat([per_seed_pooled(oof, h) for h in HORIZONS], ignore_index=True)
     ps_all.to_csv(f"attn_per_seed_r2_{PRIMARY_TAG}.csv", index=False)
@@ -449,7 +502,7 @@ def main():
               "  Bands are participant-cluster bootstrap (the unit used everywhere in this paper).")
 
     if occs is not None:
-        print("\n=== OCCLUSION: what the RAW 60-min window is worth (input-level, faithful) ===")
+        print("\n=== OCCLUSION: fixed-model perturbation sensitivity (input-level) ===")
         print(occs.pivot(index="model", columns="variant", values="R2_60").round(3).to_string())
         print("\n  loss vs the intact window (dR2_60, participant-cluster 95% CI):")
         d = occs[occs.variant != "full"].copy()
@@ -458,7 +511,8 @@ def main():
         print("  keep_last_k: everything before the final k minutes is back-filled flat, so\n"
               "               only the last k minutes vary. drop_last_10: the mirror image.\n"
               "  Occluded inputs are off-distribution for a fitted model, so these losses\n"
-              "  upper-bound the information used; they are not a refit truncation study.")
+              "  reflect model sensitivity, not a guaranteed bound on information content.\n"
+              "  The refit study (window_run.py) provides the direct window-length evidence.")
 
     written = [f"attn_model_summary_{PRIMARY_TAG}.csv", f"attn_per_seed_r2_{PRIMARY_TAG}.csv",
                f"attn_verdict_{PRIMARY_TAG}.csv", f"attn_precision_{PRIMARY_TAG}.csv"]

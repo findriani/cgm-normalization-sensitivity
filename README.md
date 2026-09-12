@@ -100,8 +100,8 @@ fusion require a **GPU** with TensorFlow.
   CHANGES if the CI excludes zero and Holm p < 0.05; INCONCLUSIVE otherwise.
 - **Seeds:** 8 (RF) or 15 (deep). Each seed runs full 5-fold CV.
   CIs are participant-bootstrapped.
-- **Five CGM conditions:** global (reference), subject-scaling,
-  subject-z-scoring, pre-meal centering, pre-meal centering with scaling.
+- **Five CGM conditions:** global (reference), subject scaling,
+  pre-meal centering, subject centering, subject z-scoring (published).
 
 ## Source datasets
 

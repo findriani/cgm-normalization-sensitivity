@@ -255,9 +255,9 @@ def attention_profile_model(model):
     field 7 min, so state t ~ minutes t+/-3). For `cnn_gru` the state at t is a CUMULATIVE
     summary of minutes 0..t, so "mass on the last 10 states" does NOT mean "the last 10
     minutes carried the prediction" -- a late state already contains the early curve.
-    Attention weights here are extractable, not identifiable explanations. The faithful
-    input-level measurement is the occlusion sweep in attn_run.py (`attn_occlusion_*.csv`),
-    which perturbs the raw window and measures the actual R2 loss."""
+    Attention weights here are extractable, not identifiable explanations. The input-level
+    perturbation sensitivity analysis is the occlusion sweep in attn_run.py
+    (`attn_occlusion_*.csv`), which perturbs the raw window and measures the R2 loss."""
     if not has_attnpool(model):
         return None
     return tf.keras.Model(model.inputs, model.get_layer(SCORES_LAYER).output)

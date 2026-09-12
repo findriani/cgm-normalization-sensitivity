@@ -28,10 +28,12 @@ Differences from fusion_run.py, all deliberate (see PLAN_attention.md):
   * ATTENTION PROFILES are exported per (model, seed, fold, PARTICIPANT, t) so the
     uncertainty band can be a participant-cluster bootstrap rather than a spread over
     non-independent fold fits.
-  * OCCLUSION SWEEP (attn_occlusion_*.csv): the faithful, input-level answer to "how much
-    of the 60-min window actually matters". Attention weights are over ENCODER STATES and
-    for a GRU those are cumulative summaries, so they cannot carry that claim by
-    themselves. Costs 5 extra forward passes per (config, seed, fold) -- negligible.
+  * OCCLUSION SWEEP (attn_occlusion_*.csv): a fixed-model CGM perturbation sensitivity
+    analysis. Occluded inputs are off-distribution, so the loss reflects model sensitivity
+    rather than information content. Attention weights are over ENCODER STATES and for a
+    GRU those are cumulative summaries, so they cannot carry that claim by themselves.
+    The refit study (window_run.py) provides the direct window-length evidence.
+    Costs 5 extra forward passes per (config, seed, fold) -- negligible.
 
     SMOKE=1 python attn_run.py     # 1 seed, 3 epochs, end-to-end check
     python attn_run.py             # CLEAN=raw (primary), N_SEEDS=15
