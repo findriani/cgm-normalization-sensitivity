@@ -87,7 +87,7 @@ def main():
         ("Subject scaling",       "Training mean, participant SD",    True,  True),
         ("Pre-meal centering",    "Current window mean, training SD", False, False),
         ("Subject centering",     "Participant mean, training SD",    False, True),
-        ("Subject z (published)", "Participant mean and SD",          False, True),
+        ("Subject z",             "Participant mean and SD",          False, True),
     ]
 
     row_h = 7.0

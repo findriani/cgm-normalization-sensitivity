@@ -44,7 +44,7 @@ ARM_LABEL = {
     "subject_scale": "Subject scaling",
     "premeal_center": "Pre-meal centering",
     "subject_center": "Subject centering",
-    "subject_z": "Subject $z$ (published)",
+    "subject_z": "Subject $z$",
 }
 ARM_MD = {k: v.replace("$z$", "z") for k, v in ARM_LABEL.items()}
 CFG_ORDER = ["cgm", "cgm_static", "static_all", "persistence_5min"]
@@ -564,7 +564,7 @@ def t3():
               "\\shortstack{$\\Delta R^2$\\\\ref.}", "\\shortstack{$\\Delta R^2$\\\\arm 2}",
               "$\\Delta\\Delta R^2$ [95\\% CI]", "Holm $p$", "Verdict"]
     rows = [
-        _blockhead("A. CGM beyond context. Arm 2 = subject $z$, as published", NCOL),
+        _blockhead("A. CGM beyond context. Arm 2 = subject $z$ (per-subject z-scoring)", NCOL),
         row("Random Forest (E1)", w.loc["global", "estimate"],
             w.loc["subject_z", "estimate"], e1i),
         row("Deep mid-fusion (E2)", d2.loc["global", "dR2"],

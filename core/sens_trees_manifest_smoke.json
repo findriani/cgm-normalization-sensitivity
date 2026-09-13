@@ -1,0 +1,32 @@
+{
+  "data_hash": "eb7a92ffb0f69190",
+  "tree_counts": [
+    100,
+    300,
+    500,
+    1000
+  ],
+  "protocols": [
+    "global",
+    "subject_z"
+  ],
+  "configs": [
+    "cgm_static",
+    "static_all"
+  ],
+  "n_seeds": 1,
+  "n_folds": 5,
+  "base_seed": 42,
+  "clean": "capped",
+  "meal_caps": {
+    "calories": 2000.0,
+    "carbs": 300.0,
+    "protein": 200.0,
+    "fat": 150.0,
+    "fiber": 80.0
+  },
+  "python": "3.14.3",
+  "numpy": "2.4.4",
+  "pandas": "3.0.2",
+  "sklearn": "1.8.0"
+}

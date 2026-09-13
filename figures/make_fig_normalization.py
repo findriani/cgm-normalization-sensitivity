@@ -66,7 +66,7 @@ ARMS = [
     ("subject_scale",  "Subject\nscaling",                 True),
     ("premeal_center", "Pre-meal\ncentering\n(no leakage)", False),
     ("subject_center", "Subject\ncentering",               False),
-    ("subject_z",      "Subject z\n(published)",           False),
+    ("subject_z",      "Subject z",                        False),
 ]
 PANELS = [("CGM adds beyond context", "CGM beyond context"),
           ("context adds beyond CGM", "Context beyond CGM")]

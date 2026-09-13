@@ -56,7 +56,7 @@ Add `--smoke` to any runner for a fast single-seed sanity check.
 | **Subject scaling** | Subtract training-fold mean, divide by participant's SD | Yes | Yes |
 | **Pre-meal centering** | Subtract current window mean, divide by training-fold SD | No | No |
 | **Subject centering** | Subtract participant mean, divide by training-fold SD | No | Yes |
-| **Subject z** (published) | Subtract participant mean, divide by participant's SD | No | Yes |
+| **Subject z** | Subtract participant mean, divide by participant's SD | No | Yes |
 
 Global and pre-meal centering are leakage-free. The three subject-level
 conditions use the held-out participant's extracted windows, including

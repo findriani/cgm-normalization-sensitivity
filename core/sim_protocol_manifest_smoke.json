@@ -1,0 +1,46 @@
+{
+  "scenarios": {
+    "level_dominant": {
+      "beta_level": 0.8,
+      "beta_shape": 0.05,
+      "beta_context": 0.4
+    },
+    "shape_only": {
+      "beta_level": 0.0,
+      "beta_shape": 0.8,
+      "beta_context": 0.4
+    },
+    "no_cgm": {
+      "beta_level": 0.0,
+      "beta_shape": 0.0,
+      "beta_context": 0.6
+    },
+    "both_contribute": {
+      "beta_level": 0.4,
+      "beta_shape": 0.4,
+      "beta_context": 0.4
+    }
+  },
+  "n_sims": 20,
+  "n_participants": 40,
+  "meals_per_person": 23,
+  "n_timesteps": 12,
+  "n_seeds": 4,
+  "n_folds": 5,
+  "base_seed": 42,
+  "rho_cgm": 0.95,
+  "noise_sd": 20.0,
+  "ridge_alpha": 1.0,
+  "margin_r2": 0.02,
+  "protocols": [
+    "global",
+    "subject_scale",
+    "premeal_center",
+    "subject_center",
+    "subject_z"
+  ],
+  "ref_participants": 5000,
+  "ref_seeds": 8,
+  "python": "3.14.3",
+  "numpy": "2.4.4"
+}

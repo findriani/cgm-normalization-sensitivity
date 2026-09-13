@@ -248,7 +248,7 @@ def main():
                  label="Global (reference)"),
           Line2D([], [], color=C_PUB, marker="s", ms=4.6, lw=1.2,
                  markeredgecolor="white", markeredgewidth=0.8,
-                 label="Subject $z$ (published)")]
+                 label="Subject $z$")]
     # Wrapped, not shortened: "not testable in Shanghai" is the scope limit the figure
     # exists to make visible, so it stays in the legend rather than moving to the caption.
     hR = [Line2D([], [], color=INK, marker="D", ms=4.3, lw=1.2,
